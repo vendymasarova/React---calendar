@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+
+.fc-event-main b {
+    white-space: break-spaces !important;
+}

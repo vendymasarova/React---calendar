@@ -1227,6 +1227,11 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.37.0.tgz#cf1b5fa24217fe007f6487a26d765274925efa7d"
   integrity sha512-x5vzdtOOGgFVDCUs81QRB2+liax8rFg3+7hqM+QhBG0/G3F1ZsoYl97UrqgHgQ9KKT7G6c4V+aTUCgu/n22v1A==
 
+"@fullcalendar/bootstrap5@^6.1.5":
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/bootstrap5/-/bootstrap5-6.1.5.tgz#d916600c94bf2fd0d3b1a672f9234f695699a3c4"
+  integrity sha512-BIhQwq39Ul7HEVziSSyLYkODdWs7lXncUeWQzyGqjpJ42DoNQEa4PikswXFMvprgDHqlk51IRqxtZEj/nXN6bg==
+
 "@fullcalendar/core@^6.1.5":
   version "6.1.5"
   resolved "https://registry.yarnpkg.com/@fullcalendar/core/-/core-6.1.5.tgz#b2ec855f3144ca995af8e5b783a15002d73870fb"

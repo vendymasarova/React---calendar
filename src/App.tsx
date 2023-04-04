@@ -11,7 +11,7 @@ import bootstrap5Plugin from '@fullcalendar/bootstrap5';
 
 const App = () => {
     let id = 0;
-
+    let themeOptions:object;
     const createEventId = () => {
         return String(id++)
     }
@@ -30,11 +30,59 @@ const App = () => {
         },
         {
             id: createEventId(),
+			title: 'Easter',
+			start: '2023-04-10',
+			end: '2023-04-10',
+			color: "#eff5f9",
+            backgroundColor: '#ffe1b9',
+            textColor: '#77340c',
+            expandRows: '3',
+            eventMinHeight: '20px',
+            displayEventEnd: true,
+        },
+        {
+            id: createEventId(),
 			title: 'Submit an interview assignment',
 			start: '2023-04-10',
 			color: "#eff5f9",
             backgroundColor: '#cfefa9',
             textColor: '#5f8fa1',
+            allDay: false
+        },
+        {
+            id: createEventId(),
+			title: 'React academy',
+			start: '2023-04-25',
+            startRecur: '2023-04-25',
+            endRecud: '2023-05-04', 
+            end: '2023-05-04',
+			color: "#eff5f9",
+            backgroundColor: '#cfefa9',
+            textColor: '#5f8fa1',
+            daysOfWeek: [2, 4],
+            startTime: '18:00',
+            endTime: '21:00',
+            allDay: false,
+            groupId: '12',
+        },
+        {
+            id: createEventId(),
+			title: 'Baby sitting',
+			start: '2023-04-15',
+			end: '2023-04-17',
+			color: "#493696",
+            backgroundColor: '#d5d5fd',
+            textColor: '#493696',
+            borderColor: '#d5d5fd',
+            allDay: false
+        },
+        {
+            id: createEventId(),
+			title: 'ReactGirls Meetup',
+			start: '2023-04-20',
+			color: "#eff5f9",
+            backgroundColor: '#ffe1b9',
+            textColor: '#77340c',
             allDay: false
         }
     ])
@@ -42,8 +90,9 @@ const App = () => {
     const renderEventContent=(eventContent:EventContentArg) => {
         return(
             <>
-            <b> {eventContent.timeText}</b>
             <b>{eventContent.event.title}</b>
+            <br />
+            <span> {eventContent.timeText}</span>
             </>
         )
     }
@@ -54,15 +103,40 @@ const App = () => {
 
     const handleDataSelect = (selectInfo:DateSelectArg) => {
         let title = prompt('Add new event');
+        let end = prompt('Please enter a end date in this format: DDDD-MM-DD')
+        let priority = prompt('choose priority, options: high, medium, low');
+        console.log(priority);
+        
+        if (priority === 'high') {
+            themeOptions = {
+                color: "#eff5f9",
+                backgroundColor: '#cfefa9',
+                textColor: '#5f8fa1',
+            }
+        }
+        if (priority === 'medium') {
+            themeOptions = {
+                color: "#493696",
+                backgroundColor: '#d5d5fd',
+                textColor: '#493696',
+            }
+        }
+        if (priority === 'low') {
+            themeOptions = {
+                color: "#eff5f9",
+                backgroundColor: '#ffe1b9',
+                textColor: '#77340c',
+            }
+        }
         let calendarApi = selectInfo.view.calendar
         calendarApi.unselect();
-        if(title) {
+        if(title && end) {
             calendarApi.addEvent( {
                 id: String(id++),
                 title,
                 start: selectInfo.startStr,
-                end: selectInfo.endStr,
-                allDay: selectInfo.allDay
+                end,
+                ...themeOptions,
             })
         }
     }
@@ -74,21 +148,23 @@ const App = () => {
     }
 
     const handleDateSelect = (selectInfo) => {
-    let title = prompt('Please enter a new title for your event')
-    let calendarApi = selectInfo.view.calendar
+        let title = prompt('Please enter a new title for your event')
+        let start = prompt('Please enter a start date in this format: DDDD-MM-DD')
+        let end = prompt('Please enter a end date in this format: DDDD-MM-DD')
+        let calendarApi = selectInfo.view.calendar
 
-    calendarApi.unselect() // clear date selection
+        calendarApi.unselect() // clear date selection
 
-    if (title) {
-      calendarApi.addEvent({
-        id: id++,
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay
-      })
+        if (title && start && end) {
+            calendarApi.addEvent({
+                id: id++,
+                title,
+                start: selectInfo.startStr,
+                end: selectInfo.endStr,
+                allDay: selectInfo.allDay
+            })
+        }
     }
-  }
   }
   return (
     <>
@@ -97,7 +173,7 @@ const App = () => {
       themeSystem='bootstrap5'
       timeZone='UTC'
       headerToolbar={{
-        left:"prev, next today",
+        left:"prev, next, today",
         center: "title",
         right:"dayGridMonth, timeGridWeek, timeGridDay"
       }}
@@ -123,6 +199,13 @@ const App = () => {
       eventContent={renderEventContent}
       select={handleDataSelect}
       eventClick={handleEventClick}
+      eventTimeFormat={{
+            hour: '2-digit',
+            minute: '2-digit',
+            // second: '2-digit',
+            meridiem: false
+        }}
+    //   eventTimeFormat={'h:mm'}
       />
     </>
   );

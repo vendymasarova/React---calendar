@@ -72,20 +72,28 @@
     --bs-btn-color: #354438;
     --bs-btn-bg: #d4e9ca;
     --bs-btn-border-color: #d4e9ca;
-    --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: #0b5ed7;
-    --bs-btn-hover-border-color: #0a58ca;
+    --bs-btn-hover-color: #354438;
+    --bs-btn-hover-bg: #b3cca8;
+    --bs-btn-hover-border-color: #b3cca8;
     --bs-btn-focus-shadow-rgb: 49, 132, 253;
     --bs-btn-active-color: #354438;
     --bs-btn-active-bg: #d4e9ca;
     --bs-btn-active-border-color: #d4e9ca;
     --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
     --bs-btn-disabled-color: #fff;
-    --bs-btn-disabled-bg: #0d6efd;
-    --bs-btn-disabled-border-color: #0d6efd;
+    --bs-btn-disabled-bg: #6f6f6f;
+    --bs-btn-disabled-border-color: #6f6f6f;
     font-weight: 600;
 }
 
+.fc .fc-toolbar {
+    min-height: 100px;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 0;
+    padding-inline: 20px;
+}
 
 .fc-event-main b {
     white-space: break-spaces !important;

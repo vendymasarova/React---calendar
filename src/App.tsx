@@ -38,7 +38,7 @@ const App = () => {
             allDay: false
         }
     ])
-    console.log(initialEvents)
+
     const renderEventContent=(eventContent:EventContentArg) => {
         return(
             <>
@@ -100,6 +100,10 @@ const App = () => {
         left:"prev, next today",
         center: "title",
         right:"dayGridMonth, timeGridWeek, timeGridDay"
+      }}
+      buttonText={{
+        prev: 'prev',
+        next: 'next'
       }}
       initialView="dayGridMonth"
       selectMirror={true}

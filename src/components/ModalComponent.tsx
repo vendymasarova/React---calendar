@@ -1,11 +1,13 @@
 import React from 'react';
 import { EventInput } from '@fullcalendar/core';
 import Modal from 'react-bootstrap/Modal';
+import { Button, Form } from 'react-bootstrap';
 
 export interface MyFormData {
   title?: string;
   start?: string;
   end?: string;
+  priority?: string;
 }
 
 export interface ModalProps {
@@ -28,11 +30,13 @@ export const ModalComponent = ({show, onHide, setData, onSubmit, handleNewEvent}
       title: data.get('title') as string,
       start: data.get('start') as string,
       end: data.get('end') as string,
+      priority: data.get('priority') as string,
     };
     const newEvent: EventInput = {
         title: formData.title,
         start: formData.start,
         end: formData.end,
+        priority: formData.priority,
     };
     setData(formData)
     handleNewEvent(newEvent);
@@ -46,14 +50,47 @@ export const ModalComponent = ({show, onHide, setData, onSubmit, handleNewEvent}
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <form ref={form} onSubmit={onSubmit}>
+            {/* <form ref={form} onSubmit={onSubmit}>
                 <input type="text" name='title' />
                 <input type="datepicker" name='start' />
                 <input type="datepicker" name='end' />
                 <button type='submit' onClick={submit}>
                     Save Changes
                 </button>
-            </form>
+            </form> */}
+            <Form ref={form} onSubmit={onSubmit}>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control type="email" placeholder="Enter title" name='title'/>
+                    <Form.Text className="text-muted">
+                    We'll never share your email with anyone else.
+                    </Form.Text>
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="text" placeholder="Enter start date in format DDDD-MM-DD" name='start' />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="text" placeholder="Enter end date in format DDDD-MM-DD" name='end' />
+                </Form.Group>
+                <div className="form-froup">
+                    <label >Low priority</label>
+                    <input type="radio" name='priority' value='low' />
+                </div>
+                <div className="form-froup">
+                    <label >Medium priority</label>
+                    <input type="radio" name='priority' value='medium' />
+                </div>
+                <div className="form-froup">
+                    <label >High priority</label>
+                    <input type="radio" name='priority' value='high' />
+                </div>
+                <Button variant="primary" type="submit" onClick={submit}>
+                    Submit
+                </Button>
+            </Form>
         </Modal.Body>
         <Modal.Footer>
           <button onClick={onHide}>

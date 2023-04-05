@@ -8,6 +8,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import {
   DateSelectArg,
+  EventClickArg,
   EventContentArg,
   EventInput,
 } from "@fullcalendar/core";
@@ -60,7 +61,7 @@ const App = () => {
       title: "React academy",
       start: "2023-04-25",
       startRecur: "2023-04-25",
-      endRecud: "2023-05-04",
+      endRecur: "2023-05-04",
       end: "2023-05-04",
       color: "#eff5f9",
       backgroundColor: "#cfefa9",
@@ -165,14 +166,6 @@ const App = () => {
       allDay: false,
     },
   ]);
-  console.log(events);
-
-  const handleData = (formData: MyFormData) => {
-    console.log(formData);
-    setData(() => formData);
-  };
-
-  console.log(data);
 
   const handleNewEvent = (event: EventInput) => {
     setEvents([...events, event]);
@@ -190,26 +183,38 @@ const App = () => {
 
   const handleDataSelect = (selectInfo: DateSelectArg) => {
     setShowModal(() => !showModal);
-
+    console.log(data)
     let calendarApi = selectInfo.view.calendar;
     calendarApi.unselect();
+    console.log(selectInfo)
+    if(data?.priority === 'high') {
+        themeOptions = {
+            color: "red",
+            backgroundColor: "#ffe1b9",
+            textColor: "#77340c",
+        }
+    }
     calendarApi.addEvent({
+        
       id: String(id++),
       title: data?.title,
       start: selectInfo.startStr,
       ...themeOptions,
     });
   };
+  console.log(data)
 
-  console.log(data);
-
-  const handleEventClick = (clickInfo) => {
-    let text = `Are you sure you want to delete the event '${clickInfo.event.title}'`;
-    if (window.confirm(text)) {
-      clickInfo.event.remove();
+    const handleEventClick = (clickInfo: EventClickArg) => {
+        console.log(clickInfo.event.id)
+        if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'?`)) {
+            const eventId = clickInfo.event.title;
+            const updatedEvents = events.filter((event) => event.title !== eventId);
+            setEvents(updatedEvents);
+        }
     }
+    
 
-    const handleDateSelect = (selectInfo) => {
+    const handleDateSelect = (selectInfo: DateSelectArg) => {
       let title = prompt("Please enter a new title for your event");
       let start = prompt(
         "Please enter a start date in this format: DDDD-MM-DD"
@@ -228,7 +233,6 @@ const App = () => {
         });
       }
     };
-  };
   return (
     <>
       <FullCalendar
@@ -274,7 +278,7 @@ const App = () => {
       {showModal && (
         <ModalComponent
           show={showModal}
-          setData={handleData}
+          setData={setData}
           onHide={() => setShowModal(false)}
           onSubmit={handleDataSelect}
           setEvents={setEvents}
@@ -283,6 +287,7 @@ const App = () => {
       )}
     </>
   );
+      
 };
 
 export default App;

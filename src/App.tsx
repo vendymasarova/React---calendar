@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-
+import React, { FormEvent, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
+import interactionPlugin from "@fullcalendar/interaction";
 import {
   DateSelectArg,
   EventClickArg,
@@ -14,7 +13,6 @@ import {
 } from "@fullcalendar/core";
 import bootstrap5Plugin from "@fullcalendar/bootstrap5";
 import { ModalComponent, MyFormData } from "./components/ModalComponent";
-import { formatDiagnosticsWithColorAndContext } from "typescript";
 
 const App = () => {
   let id = 0;
@@ -22,77 +20,6 @@ const App = () => {
   const createEventId = () => {
     return String(id++);
   };
-  const [initialEvents, setInitialEvents] = useState([
-    {
-      id: createEventId(),
-      title: "Trip to Dolomites",
-      start: "2023-04-06",
-      end: "2023-04-10",
-      color: "#eff5f9",
-      backgroundColor: "#ffe1b9",
-      textColor: "#77340c",
-      expandRows: "3",
-      eventMinHeight: "20px",
-      displayEventEnd: true,
-    },
-    {
-      id: createEventId(),
-      title: "Easter",
-      start: "2023-04-10",
-      end: "2023-04-10",
-      color: "#eff5f9",
-      backgroundColor: "#ffe1b9",
-      textColor: "#77340c",
-      expandRows: "3",
-      eventMinHeight: "20px",
-      displayEventEnd: true,
-    },
-    {
-      id: createEventId(),
-      title: "Submit an interview assignment",
-      start: "2023-04-10",
-      color: "#eff5f9",
-      backgroundColor: "#cfefa9",
-      textColor: "#5f8fa1",
-      allDay: false,
-    },
-    {
-      id: createEventId(),
-      title: "React academy",
-      start: "2023-04-25",
-      startRecur: "2023-04-25",
-      endRecur: "2023-05-04",
-      end: "2023-05-04",
-      color: "#eff5f9",
-      backgroundColor: "#cfefa9",
-      textColor: "#5f8fa1",
-      daysOfWeek: [2, 4],
-      startTime: "18:00",
-      endTime: "21:00",
-      allDay: false,
-      groupId: "12",
-    },
-    {
-      id: createEventId(),
-      title: "Baby sitting",
-      start: "2023-04-15",
-      end: "2023-04-17",
-      color: "#493696",
-      backgroundColor: "#d5d5fd",
-      textColor: "#493696",
-      borderColor: "#d5d5fd",
-      allDay: false,
-    },
-    {
-      id: createEventId(),
-      title: "ReactGirls Meetup",
-      start: "2023-04-20",
-      color: "#eff5f9",
-      backgroundColor: "#ffe1b9",
-      textColor: "#77340c",
-      allDay: false,
-    },
-  ]);
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState<MyFormData>();
   const [events, setEvents] = useState<EventInput[]>([
@@ -134,15 +61,13 @@ const App = () => {
       title: "React academy",
       start: "2023-04-25",
       startRecur: "2023-04-25",
-      endRecud: "2023-05-04",
-      end: "2023-05-04",
+      endRecur: "2023-05-05",
       color: "#eff5f9",
       backgroundColor: "#cfefa9",
       textColor: "#5f8fa1",
       daysOfWeek: [2, 4],
       startTime: "18:00",
       endTime: "21:00",
-      allDay: false,
       groupId: "12",
     },
     {
@@ -181,58 +106,36 @@ const App = () => {
     );
   };
 
-  const handleDataSelect = (selectInfo: DateSelectArg) => {
+  const addNewEvent = (selectInfo: DateSelectArg,  e: FormEvent<HTMLFormElement>) => {
     setShowModal(() => !showModal);
     console.log(data)
     let calendarApi = selectInfo.view.calendar;
     calendarApi.unselect();
     console.log(selectInfo)
     if(data?.priority === 'high') {
-        themeOptions = {
-            color: "red",
-            backgroundColor: "#ffe1b9",
-            textColor: "#77340c",
-        }
+      themeOptions = {
+        color: "#77340c",
+        backgroundColor: "#ffe1b9",
+        textColor: "#77340c",
+      }
     }
     calendarApi.addEvent({
-        
       id: String(id++),
       title: data?.title,
       start: selectInfo.startStr,
       ...themeOptions,
     });
   };
-  console.log(data)
 
-    const handleEventClick = (clickInfo: EventClickArg) => {
-        console.log(clickInfo.event.id)
-        if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'?`)) {
-            const eventId = clickInfo.event.title;
-            const updatedEvents = events.filter((event) => event.title !== eventId);
-            setEvents(updatedEvents);
-        }
+  const removeEvent = (clickInfo: EventClickArg) => {
+    console.log(clickInfo.event.id)
+    if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'?`)) {
+      const eventId = clickInfo.event.title;
+      const updatedEvents = events.filter((event) => event.title !== eventId);
+      setEvents(updatedEvents);
     }
+  }
     
-
-    const handleDateSelect = (selectInfo: DateSelectArg) => {
-      let title = prompt("Please enter a new title for your event");
-      let start = prompt(
-        "Please enter a start date in this format: DDDD-MM-DD"
-      );
-      let end = prompt("Please enter a end date in this format: DDDD-MM-DD");
-      let calendarApi = selectInfo.view.calendar;
-
-      calendarApi.unselect(); // clear date selection
-      if (title && start && end) {
-        calendarApi.addEvent({
-          id: id++,
-          title,
-          start: selectInfo.startStr,
-          end: selectInfo.endStr,
-          allDay: selectInfo.allDay,
-        });
-      }
-    };
   return (
     <>
       <FullCalendar
@@ -266,7 +169,7 @@ const App = () => {
         locale={"cs"}
         firstDay={1}
         eventContent={renderEventContent}
-        eventClick={handleEventClick}
+        eventClick={removeEvent}
         select={() => setShowModal(() => !showModal)}
         eventTimeFormat={{
           hour: "2-digit",
@@ -280,14 +183,14 @@ const App = () => {
           show={showModal}
           setData={setData}
           onHide={() => setShowModal(false)}
-          onSubmit={handleDataSelect}
+          onSubmit={addNewEvent}
           setEvents={setEvents}
           handleNewEvent={handleNewEvent}
+          events={events}
         />
       )}
     </>
   );
-      
 };
 
 export default App;

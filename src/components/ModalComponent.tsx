@@ -1,5 +1,5 @@
-import React from 'react';
-import { EventInput } from '@fullcalendar/core';
+import React, { FormEvent, FormEventHandler, MouseEventHandler } from 'react';
+import { DateSelectArg, EventInput } from '@fullcalendar/core';
 import Modal from 'react-bootstrap/Modal';
 import { Button, Form } from 'react-bootstrap';
 
@@ -15,15 +15,14 @@ export interface ModalProps {
   onHide: () => void;
   setData: (data: MyFormData) => void;
   setEvents:(events: EventInput[]) => void;
-  onSubmit: () => void;
-  events: MyFormData[];
+  onSubmit: (selectInfo: DateSelectArg, e: FormEvent<HTMLFormElement>) => void;
+  events: EventInput[];
   handleNewEvent: (newEvent: EventInput) => void;
 }
 
 export const ModalComponent = ({show, onHide, setData, onSubmit, handleNewEvent}: ModalProps) => {
-    const form = React.useRef<undefined | HTMLFormElement | undefined>(null)
-
-  const submit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const form = React.useRef<HTMLFormElement>(null);
+  const submit: MouseEventHandler<HTMLButtonElement> = (e): void => {
     e.preventDefault();
     const data = new FormData(form.current as HTMLFormElement);
     const formData: MyFormData = {
@@ -40,64 +39,39 @@ export const ModalComponent = ({show, onHide, setData, onSubmit, handleNewEvent}
     };
     setData(formData)
     handleNewEvent(newEvent);
-    // setEvents(events && Array.isArray(events) ? [...events, newEvent] : [newEvent]);
   };
 
   return (
     <div>
       <Modal show={show} onHide={onHide}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Add new event</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            {/* <form ref={form} onSubmit={onSubmit}>
-                <input type="text" name='title' />
-                <input type="datepicker" name='start' />
-                <input type="datepicker" name='end' />
-                <button type='submit' onClick={submit}>
-                    Save Changes
-                </button>
-            </form> */}
             <Form ref={form} onSubmit={onSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter title" name='title'/>
+                    <Form.Label>Event name</Form.Label>
+                    <Form.Control type="email" name='title'/>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                    <Form.Label>From</Form.Label>
+                    <Form.Control type="text" placeholder="Enter start date" name='start' />
                     <Form.Text className="text-muted">
-                    We'll never share your email with anyone else.
+                    format YYYY-MM-DD
                     </Form.Text>
                 </Form.Group>
-
                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="text" placeholder="Enter start date in format DDDD-MM-DD" name='start' />
+                    <Form.Label>To</Form.Label>
+                    <Form.Control type="text" placeholder="Enter end date" name='end' />
+                    <Form.Text className="text-muted">
+                    format YYYY-MM-DD
+                    </Form.Text>
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="text" placeholder="Enter end date in format DDDD-MM-DD" name='end' />
-                </Form.Group>
-                <div className="form-froup">
-                    <label >Low priority</label>
-                    <input type="radio" name='priority' value='low' />
-                </div>
-                <div className="form-froup">
-                    <label >Medium priority</label>
-                    <input type="radio" name='priority' value='medium' />
-                </div>
-                <div className="form-froup">
-                    <label >High priority</label>
-                    <input type="radio" name='priority' value='high' />
-                </div>
                 <Button variant="primary" type="submit" onClick={submit}>
                     Submit
                 </Button>
             </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <button onClick={onHide}>
-            Close
-          </button>
-          
-        </Modal.Footer>
       </Modal>
     </div>
   );
